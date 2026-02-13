@@ -1,1 +1,1 @@
-# TTT4280_Sensorer_Lab
+# TTT4280 Sensors and Instrumentation Lab Work
