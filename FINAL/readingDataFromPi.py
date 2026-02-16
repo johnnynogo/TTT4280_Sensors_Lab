@@ -9,7 +9,7 @@ channels = 3
 freqIn = 1000   #1 kHz
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-DATA_PATH = os.path.join(BASE_DIR, "test.bin")
+DATA_PATH = os.path.join(BASE_DIR, "day3-n172-5(FINAL).bin")
 
 periodsCount = 4 #How many periods you want to display
 periodTime = 1/freqIn 
@@ -149,19 +149,19 @@ plt.show()
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
-DATA_PATH = os.path.join(BASE_DIR, "day3-t2-1.bin")
+DATA_PATH = os.path.join(BASE_DIR, "day3-n172-1(FINAL).bin")
 sample_period, data1 = raspi_import(DATA_PATH)
 
-DATA_PATH = os.path.join(BASE_DIR, "day3-t2-2.bin")
+DATA_PATH = os.path.join(BASE_DIR, "day3-n172-2(FINAL).bin")
 sample_period, data2 = raspi_import(DATA_PATH)
 
-DATA_PATH = os.path.join(BASE_DIR, "day3-t2-3.bin")
+DATA_PATH = os.path.join(BASE_DIR, "day3-n172-3(FINAL).bin")
 sample_period, data3 = raspi_import(DATA_PATH)
 
-DATA_PATH = os.path.join(BASE_DIR, "day3-t2-4.bin")
+DATA_PATH = os.path.join(BASE_DIR, "day3-n172-4(FINAL).bin")
 sample_period, data4 = raspi_import(DATA_PATH)
 
-DATA_PATH = os.path.join(BASE_DIR, "day3-t2-5.bin")
+DATA_PATH = os.path.join(BASE_DIR, "day3-n172-1(FINAL).bin")
 sample_period, data5 = raspi_import(DATA_PATH)
 
 fs = 1/sample_period
@@ -172,7 +172,7 @@ for i in range(len(data)):
     x2 = data[i][:, 1] 
     x3 = data[i][:, 2]
 
-    n21, lags21, cc21, t21 = crosscorr_delay(x2, x1, fs) #?????
+    n21, lags21, cc21, t21 = crosscorr_delay(x2, x1, fs)
     n31, lags31, cc31, t31 = crosscorr_delay(x3, x1, fs)
     n32, lags32, cc32, t32 = crosscorr_delay(x3, x2, fs)
 
