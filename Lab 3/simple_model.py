@@ -1,12 +1,14 @@
 import numpy as np
 
+# muabo = np.genfromtxt("./muabo.txt", delimiter=",")
+# muabd = np.genfromtxt("./muabd.txt", delimiter=",")
 
-muabo = np.genfromtxt("./muabo.txt", delimiter=",")
-muabd = np.genfromtxt("./muabd.txt", delimiter=",")
+muabo = np.genfromtxt("Lab3/given_scripts/muabo.txt", delimiter=",")
+muabd = np.genfromtxt("Lab3/given_scripts/muabd.txt", delimiter=",")
 
-red_wavelength = None # Replace with wavelength in nanometres
-green_wavelength = None # Replace with wavelength in nanometres
-blue_wavelength = None # Replace with wavelength in nanometres
+red_wavelength = 600 # Replace with wavelength in nanometres
+green_wavelength = 515 # Replace with wavelength in nanometres
+blue_wavelength = 460 # Replace with wavelength in nanometres
 
 wavelength = np.array([red_wavelength, green_wavelength, blue_wavelength])
 
@@ -33,4 +35,23 @@ musr = 100 * (17.6*(wavelength/500)**-4 + 18.78*(wavelength/500)**-0.22)
 # mua and musr are now available as shape (3,) arrays
 # Red, green and blue correspond to indexes 0, 1 and 2, respectively
 
-# TODO calculate penetration depth
+# DONE (a) calculate penetration depth (2.1 a)
+C = 3 * mua * (musr + mua)
+delta = 1 / (np.sqrt(C))                                # penetration depth
+print(f"Penetration depth human tissue: {delta}\n")
+
+# DONE (b) calculate transmittance for RGB (2.1 b)
+d = 300 * 10**-6           # thickness of Johnny's finger
+T = {
+    "red": np.exp(-d / delta[0]),
+    "green": np.exp(-d / delta[1]),
+    "blue": np.exp(-d / delta[2])
+}
+
+for color, value in T.items():
+    print(color, f"{100*value:.6} %\n")
+
+# DONE (c) on paper
+
+# TODO (d): 
+# K = 
