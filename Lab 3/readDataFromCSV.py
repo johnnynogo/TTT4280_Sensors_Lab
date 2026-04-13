@@ -28,15 +28,15 @@ skin narrow to conserve body heat. This reduces blood flow and circulation to
 the extremities (fingers and wrists), making it hard for devices to detect a 
 strong pulse signal. (interpreted as lower than it is basically)
 
+SWICH COLD AND WARM FFT PLOTS??
+
 Maybe check if red is better than green in some cases for measuring 
 pulse? could explain wrong measurements
 """
 
-
-
 # Load the file
-df = pd.read_csv("reflektans_1_roi (THROWAWAY).csv", sep=r"\s+", header=None)
-df.columns = ["RED", "GREEN", "BLUE"]
+df = pd.read_csv("hoy_puls_2_roi_2.csv", sep=r"\s+", header=None)
+df.columns = ["Red", "Green", "Blue"]
 
 # Time axis
 time = np.linspace(0, 30, len(df))
@@ -45,11 +45,11 @@ N = len(df)                     # number of samples
 
 #==============TIME DOMAIN PLOT=================#
 for col in df.columns:
-    plt.plot(time, df[col], label=col)
+    plt.plot(time, df[col], label=col, color=col[0].lower())
 
 plt.title("Pulse for each RGB")
-plt.xlabel("Seconds")
-plt.ylabel("Energy?")
+plt.xlabel("Time [s]")
+plt.ylabel("Mean Pixel Intensity [a.u.]")
 plt.legend()
 plt.grid(True)
 plt.show()
@@ -69,16 +69,16 @@ for col in df.columns:
     # Keep only positive frequencies
     mask = (freqs >= 0) & (freqs <= 6)
     freqs_pos = freqs[mask]
-    fft_mag = np.abs(fft_vals[mask]) #For magnitude !!!!!
+    fft_mag = np.abs(fft_vals[mask])
     fft_mag_all.append(fft_mag)
     freqs_all = freqs_pos
 
-    plt.plot(freqs_pos, fft_mag, label = f"FFT of {col} (mean removed)")
+    plt.plot(freqs_pos, fft_mag, label=f"{col}", color=col[0].lower())
 
 plt.legend()    
-plt.title("FFT")
+plt.title("Frequency Spectrum of RGB Signals")
 plt.xlabel("Frequency [Hz]")
-plt.ylabel("Magnitude")
+plt.ylabel("Magnitude [a.u.]")
 plt.grid(True)
 plt.show()
 
@@ -105,16 +105,16 @@ for col in df.columns:
     # Keep only positive frequencies
     mask = (freqs >= 0) & (freqs <= 6)
     freqs_pos = freqs[mask]
-    fft_mag = np.abs(fft_vals[mask]) #For magnitude !!!!!
+    fft_mag = np.abs(fft_vals[mask])
     fft_mag_filtered_all.append(fft_mag)
     freqs_filtered_all = freqs_pos
 
-    plt.plot(freqs_pos, fft_mag, label = f"FFT of {col} (mean removed)")
+    plt.plot(freqs_pos, fft_mag, label = f"FFT of {col}", color=col[0].lower())
 
 plt.legend()    
-plt.title("FFT Filter Removed")
+plt.title("Filtered Frequency Spectrum of RGB Signals")
 plt.xlabel("Frequency [Hz]")
-plt.ylabel("Magnitude")
+plt.ylabel("Magnitude [a.u.]")
 plt.grid(True)
 plt.show()
 
@@ -137,17 +137,17 @@ def find_pulsefrequency(magnitude, freq):
 pulsefrequency_red_before = find_pulsefrequency(fft_mag_all[0], freqs_all)
 pulsefrequency_green_before = find_pulsefrequency(fft_mag_all[1], freqs_all)
 pulsefrequency_blue_before = find_pulsefrequency(fft_mag_all[2], freqs_all)
-print(f"Pulsfrekvens før filter (Rød): {pulsefrequency_red_before * 60:.2f} BPM")
-print(f"Pulsfrekvens før filter (Grønn): {pulsefrequency_green_before * 60:.2f} BPM")
-print(f"Pulsfrekvens før filter (Blå): {pulsefrequency_blue_before * 60:.2f} BPM")
+print(f"Plusefrequency before filter (Rød): {pulsefrequency_red_before * 60:.2f} BPM")
+print(f"Plusefrequency before filter (Grønn): {pulsefrequency_green_before * 60:.2f} BPM")
+print(f"Plusefrequency before filter (Blå): {pulsefrequency_blue_before * 60:.2f} BPM")
 
 #--After filter--
 pulsefrequency_red = find_pulsefrequency(fft_mag_filtered_all[0], freqs_filtered_all)
 pulsefrequency_green = find_pulsefrequency(fft_mag_filtered_all[1], freqs_filtered_all)
 pulsefrequency_blue = find_pulsefrequency(fft_mag_filtered_all[2], freqs_filtered_all)
-print(f"\nPulsfrekvens etter filter (Rød): {pulsefrequency_red * 60:.2f} BPM")
-print(f"Pulsfrekvens etter filter (Grønn): {pulsefrequency_green * 60:.2f} BPM")
-print(f"Pulsfrekvens etter filter (Blå): {pulsefrequency_blue * 60:.2f} BPM")
+print(f"\nPulsefrequency after filter (Rød): {pulsefrequency_red * 60:.2f} BPM")
+print(f"Pulsefrequency after filter (Grønn): {pulsefrequency_green * 60:.2f} BPM")
+print(f"Pulsefrequency after filter (Blå): {pulsefrequency_blue * 60:.2f} BPM")
 
 #===================SNR==================#
 pulse_real = 62  
@@ -171,10 +171,10 @@ power_red_filtered = (fft_mag_filtered_all[0]**2) / N**2
 power_green_filtered = (fft_mag_filtered_all[1]**2) / N**2
 power_blue_filtered = (fft_mag_filtered_all[2]**2) / N**2
 
-#---Before filtering--- (Weird that were using sum and mean, but maybe makes sense)
-signal_power_red_before = np.sum(power_red_before[signal_indices_before])
-signal_power_green_before = np.sum(power_green_before[signal_indices_before])
-signal_power_blue_before = np.sum(power_blue_before[signal_indices_before])
+#---Before filtering--- 
+signal_power_red_before = np.mean(power_red_before[signal_indices_before])
+signal_power_green_before = np.mean(power_green_before[signal_indices_before])
+signal_power_blue_before = np.mean(power_blue_before[signal_indices_before])
 
 noise_power_red_before = np.mean(np.delete(power_red_before, signal_indices_before))
 noise_power_green_before = np.mean(np.delete(power_green_before, signal_indices_before))
@@ -184,15 +184,15 @@ SNR_red_before = 10 * np.log10(signal_power_red_before / noise_power_red_before)
 SNR_green_before = 10 * np.log10(signal_power_green_before / noise_power_green_before)
 SNR_blue_before = 10 * np.log10(signal_power_blue_before / noise_power_blue_before)
 
-print("\nSNR før filtrering:")
-print(f"Rød: {SNR_red_before:.2f} dB")
-print(f"Grønn: {SNR_green_before:.2f} dB")
-print(f"Blå: {SNR_blue_before:.2f} dB")
+print("\nSNR before filter:")
+print(f"Red: {SNR_red_before:.2f} dB")
+print(f"Green: {SNR_green_before:.2f} dB")
+print(f"Blue: {SNR_blue_before:.2f} dB")
 
 #---After filtering---
-signal_power_red_filtered = np.sum(power_red_filtered[signal_indices_filtered])
-signal_power_green_filtered = np.sum(power_green_filtered[signal_indices_filtered])
-signal_power_blue_filtered = np.sum(power_blue_filtered[signal_indices_filtered])
+signal_power_red_filtered = np.mean(power_red_filtered[signal_indices_filtered])
+signal_power_green_filtered = np.mean(power_green_filtered[signal_indices_filtered])
+signal_power_blue_filtered = np.mean(power_blue_filtered[signal_indices_filtered])
 
 noise_power_red_filtered = np.mean(np.delete(power_red_filtered, signal_indices_filtered))
 noise_power_green_filtered = np.mean(np.delete(power_green_filtered, signal_indices_filtered))
@@ -202,7 +202,7 @@ SNR_red_filtered = 10 * np.log10(signal_power_red_filtered / noise_power_red_fil
 SNR_green_filtered = 10 * np.log10(signal_power_green_filtered / noise_power_green_filtered)
 SNR_blue_filtered = 10 * np.log10(signal_power_blue_filtered / noise_power_blue_filtered)
 
-print("\nSNR etter filtrering:")
-print(f"Rød: {SNR_red_filtered:.2f} dB")
-print(f"Grønn: {SNR_green_filtered:.2f} dB")
-print(f"Blå: {SNR_blue_filtered:.2f} dB")
+print("\nSNR after filtrering:")
+print(f"Red: {SNR_red_filtered:.2f} dB")
+print(f"Green: {SNR_green_filtered:.2f} dB")
+print(f"Blue: {SNR_blue_filtered:.2f} dB")
