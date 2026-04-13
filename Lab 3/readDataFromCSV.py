@@ -35,7 +35,7 @@ pulse? could explain wrong measurements
 """
 
 # Load the file
-df = pd.read_csv("hoy_puls_2_roi_2.csv", sep=r"\s+", header=None)
+df = pd.read_csv("transmitans_0_roi_2.csv", sep=r"\s+", header=None)
 df.columns = ["Red", "Green", "Blue"]
 
 # Time axis
