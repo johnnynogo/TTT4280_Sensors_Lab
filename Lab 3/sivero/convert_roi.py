@@ -1,7 +1,7 @@
 import subprocess
 
 
-files = ["hoy_puls.mp4"]
+files = ["Lab\ 3/transmittans/iphone/trans_iphone_movie1.mp4"]
 
 for filename in files:
 
